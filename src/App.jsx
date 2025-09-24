@@ -7,6 +7,10 @@ const isMobile = () =>
 
 const App = () => {
   const [showInstall, setShowInstall] = useState(false);
+  const [years, setYears] = useState("-");
+  const [months, setMonths] = useState("-");
+  const [days, setDays] = useState("-");
+  const [totalDays, setTotalDays] = useState("-");
 
   useEffect(() => {
     if (isMobile()) {
@@ -27,14 +31,88 @@ const App = () => {
     }
   }, []);
 
-  const handleCloseClick = useCallback(() => {
-    setShowInstall(false);
-  }, []);
+  const calculateAgeAndDaysAlive = (e) => {
+    e.preventDefault();
+    const dateInput = document.getElementById("date-input");
+    const dob = new Date(dateInput.value);
+    const today = new Date();
+
+    if (isNaN(dob.getTime())) {
+      alert("Please enter a valid date of birth.");
+      return;
+    }
+
+    let years = today.getFullYear() - dob.getFullYear();
+    let months = today.getMonth() - dob.getMonth();
+    let days = today.getDate() - dob.getDate();
+
+    if (months < 0 || (months === 0 && days < 0)) {
+      years--;
+      months += 12;
+    }
+
+    if (days < 0) {
+      const previousMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += previousMonth.getDate();
+      months--;
+    }
+
+    const timeDiff = today.getTime() - dob.getTime();
+    const daysAlive = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    setYears(years);
+    setMonths(months);
+    setDays(days);
+    setTotalDays(daysAlive);
+  };
+
+  const handleRefresh = () => {
+    const dateInput = document.getElementById("date-input");
+    dateInput.value = "";
+    setYears("-");
+    setMonths("-");
+    setDays("-");
+    setTotalDays("-");
+  };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-white relative p-4">
-      <h1 className="text-6xl font-extrabold mb-8 drop-shadow-lg">Welcome To APP</h1>
-      <p className="text-2xl font-bold">Add Soon items to enhance your experience !!</p>
+    <div className="min-h-screen flex flex-col bg-[#7d56f3]">
+      <div className="marquee-container">
+        <div className="marquee-content">
+          ENTER YOUR DATE OF BIRTH TO CALCULATE HOW MANY DAYS YOU ALIVE IN THIS
+          EARTH
+        </div>
+      </div>
+      <div className="container">
+        <div className="input-wrapper">
+          <input type="date" id="date-input" />
+          <button id="calc-age-btn" onClick={calculateAgeAndDaysAlive}>
+            Calculate
+          </button>
+        </div>
+        <div className="output-wrapper">
+          <div>
+            <span id="years">{years}</span>
+            <p>Years</p>
+          </div>
+          <div>
+            <span id="months">{months}</span>
+            <p>Months</p>
+          </div>
+          <div>
+            <span id="days">{days}</span>
+            <p>Days</p>
+          </div>
+          <div>
+            <span id="result">{totalDays}</span>
+            <p>Total days</p>
+          </div>
+        </div>
+        <button id="refresh-btn" onClick={handleRefresh}>
+          Refresh
+        </button>
+      </div>
+
       {showInstall && (
         <div
           className="fixed top-10 left-1/2 transform -translate-x-1/2 bg-white text-black p-6 rounded-lg shadow-2xl flex flex-col items-center animate-fadeIn z-50 max-w-xs w-full"

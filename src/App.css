@@ -1,5 +1,130 @@
 @import "tailwindcss";
 
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  width: min(60%, 28.12em);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}
+
+.container * {
+  border: none;
+  outline: none;
+}
+
+.input-wrapper {
+  background-color: #ffffff;
+  padding: 1.87em 1.5em;
+  border-radius: 0.5em;
+  box-shadow: 0 0.93em 1.25em rgba(217, 4, 4, 0.3);
+  margin-bottom: 3.12em;
+  display: grid;
+  grid-template-columns: 9fr 3fr;
+  gap: 1em;
+}
+
+input,
+button {
+  font-weight: 500;
+  border-radius: 0.31em;
+  border-radius: 10px;
+  box-shadow: 30px solid black;
+}
+
+input {
+  background-color: #eeeeff;
+  color: #080808;
+  padding: 1.2em 1.25em;
+  font-size: 0.87em;
+}
+
+button {
+  color: #ffffff;
+  background-color: #f35656;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.output-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.output-wrapper div {
+  height: 6.25em;
+  width: 6.25em;
+  background-color: #ffffff;
+  border-radius: 0.31em;
+  color: #080808;
+  display: grid;
+  place-items: center;
+  padding: 1.25em 0;
+  box-shadow: 0 0.93em 1.25em rgba(0, 0, 0, 0.3);
+}
+
+span {
+  font-size: 1.87em;
+  font-weight: 500;
+}
+
+p {
+  font-size: 0.87em;
+  color: #707070;
+  font-weight: 400;
+}
+
+#refresh-btn {
+  background-color: #0a0ae9;
+  color: #f8f6f6;
+  padding: 1.2em 1.25em;
+  font-size: 1em;
+  width: min(60%, 28.12em);
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 130%;
+  left: 50%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 6px 6px rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 1em;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #0e0d0d;
+  animation: marquee 10s linear infinite;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -11,6 +136,77 @@
   }
 }
 
+.marquee-content:hover {
+  animation-play-state: paused;
+  color: #ff6347;
+}
+
+.marquee-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2),
+    rgba(0, 0, 0, 0.1)
+  );
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .animate-fadeIn {
   animation: fadeIn 0.3s ease forwards;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+  }
+
+  .input-wrapper {
+    grid-template-columns: 1fr;
+    padding: 1.5em;
+  }
+
+  input,
+  button {
+    font-size: 0.8em;
+    padding: 1em;
+  }
+
+  .output-wrapper {
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+  }
+
+  .output-wrapper div {
+    height: 5em;
+    width: calc(50% - 0.5em);
+  }
+
+  span {
+    font-size: 1.5em;
+  }
+
+  p {
+    font-size: 0.8em;
+  }
+
+  #refresh-btn {
+    width: 90%;
+    top: 150%;
+  }
 }
