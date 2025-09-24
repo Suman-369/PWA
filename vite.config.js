@@ -11,7 +11,7 @@ export default defineConfig({
     VitePWA({
       manifest: {
         name: "Age Calculator",
-        short_name: "Age Calc",
+        short_name: "Age Calculator",
         description: "Metalic fox portfolio",
         theme_color: "black",
         icons: [

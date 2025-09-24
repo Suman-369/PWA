@@ -127,7 +127,7 @@ const App = () => {
       <div className="container">
         <div className="input-wrapper">
           {isMobile() ? (
-            <input type="text" id="date-input" placeholder="DD/MM/YYYY, DD-MM-YYYY, or DD MM YYYY" />
+            <input type="text" id="date-input" placeholder="DD/MM/YYYY" />
           ) : (
             <input type="date" id="date-input" />
           )}
@@ -168,7 +168,7 @@ const App = () => {
           <div className="mb-4 text-xl font-semibold" id="install-dialog-title">
             Install this app?
           </div>
-          <div className="flex space-x-4 w-full">
+          <div className="flex gap-6 w-full">
             <button
               onClick={handleInstallClick}
               className="install-button flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 flex items-center justify-center space-x-2"
