@@ -14,11 +14,13 @@ const App = () => {
 
   useEffect(() => {
     if (isMobile()) {
-      const handler = () => setShowInstall(true);
-      window.addEventListener("pwa-install-available", handler);
-      // If event already fired before mount
-      if (window.deferredPrompt) setShowInstall(true);
-      return () => window.removeEventListener("pwa-install-available", handler);
+      const handler = (e) => {
+        e.preventDefault();
+        window.deferredPrompt = e;
+        setShowInstall(true);
+      };
+      window.addEventListener("beforeinstallprompt", handler);
+      return () => window.removeEventListener("beforeinstallprompt", handler);
     }
   }, []);
 
@@ -31,10 +33,28 @@ const App = () => {
     }
   }, []);
 
-  const calculateAgeAndDaysAlive = (e) => {
+  const handleCloseClick = useCallback(() => {
+    setShowInstall(false);
+  }, []);
+
+  const calculateAgeAndDaysAlive = useCallback((e) => {
     e.preventDefault();
     const dateInput = document.getElementById("date-input");
-    const dob = new Date(dateInput.value);
+    let dob;
+
+    if (isMobile()) {
+      // For mobile, parse the text input
+      const dateString = dateInput.value;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        alert("Please enter a valid date in YYYY-MM-DD format.");
+        return;
+      }
+      dob = new Date(dateString);
+    } else {
+      // For desktop, use the date input
+      dob = new Date(dateInput.value);
+    }
+
     const today = new Date();
 
     if (isNaN(dob.getTime())) {
@@ -64,16 +84,16 @@ const App = () => {
     setMonths(months);
     setDays(days);
     setTotalDays(daysAlive);
-  };
+  }, []);
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     const dateInput = document.getElementById("date-input");
     dateInput.value = "";
     setYears("-");
     setMonths("-");
     setDays("-");
     setTotalDays("-");
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#7d56f3]">
@@ -85,7 +105,11 @@ const App = () => {
       </div>
       <div className="container">
         <div className="input-wrapper">
-          <input type="date" id="date-input" />
+          {isMobile() ? (
+            <input type="text" id="date-input" placeholder="YYYY-MM-DD" />
+          ) : (
+            <input type="date" id="date-input" />
+          )}
           <button id="calc-age-btn" onClick={calculateAgeAndDaysAlive}>
             Calculate
           </button>

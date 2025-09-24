@@ -90,7 +90,7 @@ p {
   width: min(60%, 28.12em);
   position: absolute;
   transform: translate(-50%, -50%);
-  top: 130%;
+  top: 120%;
   left: 50%;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 6px 6px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
@@ -207,6 +207,6 @@ p {
 
   #refresh-btn {
     width: 90%;
-    top: 150%;
+    top: 140%;
   }
 }
