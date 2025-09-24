@@ -43,13 +43,34 @@ const App = () => {
     let dob;
 
     if (isMobile()) {
-      // For mobile, parse the text input
-      const dateString = dateInput.value;
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-        alert("Please enter a valid date in YYYY-MM-DD format.");
+      // For mobile, parse the text input with multiple formats
+      const dateString = dateInput.value.trim();
+      let parsedDate = null;
+
+      // Try DD/MM/YYYY format
+      if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(dateString)) {
+        const parts = dateString.split('/');
+        parsedDate = new Date(parts[2], parts[1] - 1, parts[0]);
+      }
+      // Try DD-MM-YYYY format
+      else if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(dateString)) {
+        const parts = dateString.split('-');
+        parsedDate = new Date(parts[2], parts[1] - 1, parts[0]);
+      }
+      // Try DD MM YYYY format
+      else if (/^\d{1,2}\s+\d{1,2}\s+\d{4}$/.test(dateString)) {
+        const parts = dateString.split(/\s+/);
+        parsedDate = new Date(parts[2], parts[1] - 1, parts[0]);
+      } else {
+        alert("Please enter a valid date in DD/MM/YYYY, DD-MM-YYYY, or DD MM YYYY format.");
         return;
       }
-      dob = new Date(dateString);
+
+      if (isNaN(parsedDate.getTime())) {
+        alert("Please enter a valid date of birth.");
+        return;
+      }
+      dob = parsedDate;
     } else {
       // For desktop, use the date input
       dob = new Date(dateInput.value);
@@ -106,7 +127,7 @@ const App = () => {
       <div className="container">
         <div className="input-wrapper">
           {isMobile() ? (
-            <input type="text" id="date-input" placeholder="YYYY-MM-DD" />
+            <input type="text" id="date-input" placeholder="DD/MM/YYYY, DD-MM-YYYY, or DD MM YYYY" />
           ) : (
             <input type="date" id="date-input" />
           )}
@@ -147,18 +168,20 @@ const App = () => {
           <div className="mb-4 text-xl font-semibold" id="install-dialog-title">
             Install this app?
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 w-full">
             <button
               onClick={handleInstallClick}
-              className="bg-blue-600 hover:bg-blue-700 transition-colors text-white px-5 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="install-button flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transform hover:scale-105 flex items-center justify-center space-x-2"
             >
-              Install
+              <span>📱</span>
+              <span>Install</span>
             </button>
             <button
               onClick={handleCloseClick}
-              className="bg-gray-300 hover:bg-gray-400 transition-colors text-black px-5 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="close-button flex-1 bg-gradient-to-r from-gray-400 to-gray-500 hover:from-gray-500 hover:to-gray-600 transition-all duration-300 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-gray-400 transform hover:scale-105 flex items-center justify-center space-x-2"
             >
-              Close
+              <span>✕</span>
+              <span>Close</span>
             </button>
           </div>
         </div>
